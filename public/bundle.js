@@ -701,15 +701,17 @@ function compose() {
 
 var _redux = __webpack_require__(8);
 
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
 var reducer = function reducer() {
-    var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 0;
+    var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : { books: [] };
     var action = arguments[1];
 
     switch (action.type) {
-        case "INCREMENT":
-            return state + action.payload;
-        case "DECREMENT":
-            return state - action.payload;
+        case "POST_BOOK":
+            return {
+                books: [].concat(_toConsumableArray(state.books), _toConsumableArray(action.payload))
+            };
     }
     return state;
 };
@@ -717,13 +719,36 @@ var reducer = function reducer() {
 // STEP 1 create the store
 var store = (0, _redux.createStore)(reducer);
 store.subscribe(function () {
-    console.log('current state: ' + store.getState());
+    console.log('current state: ', store.getState());
+    // console.log('2nd book price: ', store.getState()[1].price);
 });
 
 // STEP 2 create and dispatch actions
-store.dispatch({ type: "INCREMENT", payload: 1 });
-store.dispatch({ type: "DECREMENT", payload: 1 });
-store.dispatch({ type: "INCREMENT", payload: 1 });
+store.dispatch({
+    type: 'POST_BOOK',
+    payload: [{
+        id: 1,
+        title: 'this is the book title',
+        description: 'this is the book',
+        price: 33.33
+    }, {
+        id: 2,
+        title: 'this is the book title 2',
+        description: 'this is the book 2',
+        price: 44.44
+    }]
+
+});
+
+store.dispatch({
+    type: "POST_BOOK",
+    payload: [{
+        id: 3,
+        title: 'title is 3rd',
+        description: '3rd desc',
+        price: 55.55
+    }]
+});
 
 /***/ }),
 /* 8 */
