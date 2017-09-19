@@ -769,17 +769,9 @@ var store = (0, _redux.createStore)(_index2.default);
 ), document.getElementById('app'));
 
 // STEP 2 create and dispatch actions
-store.dispatch((0, _booksActions.postBooks)([{
-    id: 1,
-    title: 'this is the book title',
-    description: 'this is the book',
-    price: 33.33
-}, {
-    id: 2,
-    title: 'this is the book title 2',
-    description: 'this is the book 2',
-    price: 44.44
-}]));
+// store.dispatch(postBooks(
+//
+// ));
 
 // store.dispatch(deleteBook({id: 1}));
 // store.dispatch(updateBook({
@@ -1406,10 +1398,26 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 // BOOKS REDUCERS
 
 var booksReducers = exports.booksReducers = function booksReducers() {
-    var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : { books: [] };
+    var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {
+        books: [{
+            id: 1,
+            title: 'this is the book title',
+            description: 'this is the book',
+            price: 33.33
+        }, {
+            id: 2,
+            title: 'this is the book title 2',
+            description: 'this is the book 2',
+            price: 44.44
+        }]
+    };
     var action = arguments[1];
 
     switch (action.type) {
+        case "GET_BOOKS":
+            return _extends({}, state, {
+                books: [].concat(_toConsumableArray(state.books))
+            });
         case "POST_BOOK":
             return {
                 books: [].concat(_toConsumableArray(state.books), _toConsumableArray(action.payload))
@@ -1497,13 +1505,13 @@ function addToCart(book) {
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports.postBooks = postBooks;
+exports.getBooks = getBooks;
 exports.deleteBook = deleteBook;
 exports.updateBook = updateBook;
-function postBooks(book) {
+function getBooks(book) {
+    console.log('getBooks action creator');
     return {
-        type: 'POST_BOOK',
-        payload: book
+        type: 'GET_BOOKS'
     };
 }
 
@@ -23656,6 +23664,10 @@ var _react2 = _interopRequireDefault(_react);
 
 var _reactRedux = __webpack_require__(218);
 
+var _redux = __webpack_require__(0);
+
+var _booksActions = __webpack_require__(28);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -23674,6 +23686,12 @@ var BooksList = function (_React$Component) {
     }
 
     _createClass(BooksList, [{
+        key: 'componentDidMount',
+        value: function componentDidMount() {
+            //dispatch the action
+            this.props.getBooks();
+        }
+    }, {
         key: 'render',
         value: function render() {
             var booksList = this.props.books.map(function (booksArr) {
@@ -23718,8 +23736,13 @@ function mapStateToProps(state) {
         books: state.books.books
     };
 }
+function mapDispatchToProps(dispatch) {
+    return (0, _redux.bindActionCreators)({
+        getBooks: _booksActions.getBooks
+    }, dispatch);
+}
 
-exports.default = (0, _reactRedux.connect)(mapStateToProps)(BooksList);
+exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(BooksList);
 
 /***/ }),
 /* 212 */

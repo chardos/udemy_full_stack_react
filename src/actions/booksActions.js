@@ -1,9 +1,9 @@
 
 
-export function postBooks(book) {
+export function getBooks(book) {
+    console.log('getBooks action creator');
     return {
-        type: 'POST_BOOK',
-        payload: book
+        type: 'GET_BOOKS'
     }
 }
 
