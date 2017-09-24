@@ -3,13 +3,13 @@
 export const booksReducers = (state = {
     books: [
         {
-            id: 1,
+            _id: 1,
             title: 'this is the book title',
             description: 'this is the book',
             price: 33.33,
         },
         {
-            id: 2,
+            _id: 2,
             title: 'this is the book title 2',
             description: 'this is the book 2',
             price: 44.44,
@@ -29,7 +29,7 @@ export const booksReducers = (state = {
         case "DELETE_BOOK":
             return {
                 books: state.books.filter((book) => {
-                    return book.id !== action.payload.id
+                    return book._id !== action.payload._id
                 })
             };
         case "UPDATE_BOOK":
@@ -38,7 +38,7 @@ export const booksReducers = (state = {
             // Determine at which index in books array is the book to be deleted
             const indexToUpdate = currentBookToUpdate.findIndex(
                 function(book){
-                    return book.id === action.payload.id;
+                    return book._id === action.payload._id;
                 })
 
                 const newBookToUpdate = {
