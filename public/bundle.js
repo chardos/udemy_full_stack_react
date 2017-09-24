@@ -44098,6 +44098,10 @@ var cartReducers = exports.cartReducers = function cartReducers() {
             return {
                 cart: [].concat(_toConsumableArray(state.cart), _toConsumableArray(action.payload))
             };
+        case "DELETE_CART_ITEM":
+            return {
+                cart: action.payload
+            };
     }
     return state;
 };
@@ -44113,10 +44117,18 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 exports.addToCart = addToCart;
+exports.deleteCartItem = deleteCartItem;
 function addToCart(book) {
     return {
         type: "ADD_TO_CART",
         payload: book
+    };
+}
+
+function deleteCartItem(cart) {
+    return {
+        type: "DELETE_CART_ITEM",
+        payload: cart
     };
 }
 
@@ -44140,6 +44152,10 @@ var _react2 = _interopRequireDefault(_react);
 var _reactRedux = __webpack_require__(100);
 
 var _reactBootstrap = __webpack_require__(104);
+
+var _redux = __webpack_require__(55);
+
+var _cartActions = __webpack_require__(488);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -44166,6 +44182,8 @@ var Cart = function (_React$Component) {
   }, {
     key: 'renderCart',
     value: function renderCart() {
+      var _this2 = this;
+
       var cartItemsList = this.props.cart.map(function (cartItem) {
         return _react2.default.createElement(
           _reactBootstrap.Panel,
@@ -44230,19 +44248,31 @@ var Cart = function (_React$Component) {
                 ),
                 _react2.default.createElement(
                   _reactBootstrap.Button,
-                  { bsStyle: 'danger', bsSize: 'small' },
+                  {
+                    bsStyle: 'danger',
+                    bsSize: 'small',
+                    onClick: _this2.onDelete.bind(_this2, cartItem._id)
+                  },
                   'Delete'
                 )
               )
             )
           )
         );
-      });
+      }, this);
       return _react2.default.createElement(
         _reactBootstrap.Panel,
         { header: 'Cart', bsStyle: 'primary' },
         cartItemsList
       );
+    }
+  }, {
+    key: 'onDelete',
+    value: function onDelete(_id) {
+      var cartAfterDelete = this.props.cart.filter(function (cart) {
+        return cart._id !== _id;
+      });
+      this.props.deleteCartItem(cartAfterDelete);
     }
   }, {
     key: 'render',
@@ -44267,7 +44297,13 @@ function mapStateToProps(state) {
     cart: state.cart.cart
   };
 }
-exports.default = (0, _reactRedux.connect)(mapStateToProps)(Cart);
+
+function mapDispatchToProps(dispatch) {
+  return (0, _redux.bindActionCreators)({
+    deleteCartItem: _cartActions.deleteCartItem
+  }, dispatch);
+}
+exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(Cart);
 
 /***/ })
 /******/ ]);
