@@ -1,9 +1,15 @@
 
 
 export function getBooks(book) {
-    console.log('getBooks action creator');
     return {
         type: 'GET_BOOKS'
+    }
+}
+
+export function postBooks(book) {
+    return {
+        type: 'POST_BOOK',
+        payload: book
     }
 }
 
