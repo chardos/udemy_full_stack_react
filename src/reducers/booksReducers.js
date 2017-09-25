@@ -36,25 +36,24 @@ export const booksReducers = (state = {
             // Create a copy of the current array of books
             const currentBookToUpdate = [...state.books]
             // Determine at which index in books array is the book to be deleted
-            const indexToUpdate = currentBookToUpdate.findIndex(
-                function(book){
-                    return book._id === action.payload._id;
-                })
+            const indexToUpdate = currentBookToUpdate.findIndex(book => {
+                return book._id === action.payload._id;
+            })
 
-                const newBookToUpdate = {
-                    ...currentBookToUpdate[indexToUpdate],
-                    title: action.payload.title
-                }
+            const newBookToUpdate = {
+                ...currentBookToUpdate[indexToUpdate],
+                title: action.payload.title
+            }
 
-                console.log("what is it newBookToUpdate", newBookToUpdate);
+            console.log("what is it newBookToUpdate", newBookToUpdate);
 
-                return {
-                    books: [
-                        ...currentBookToUpdate.slice(0, indexToUpdate),
-                        newBookToUpdate,
-                        ...currentBookToUpdate.slice(indexToUpdate + 1)
-                    ]
-                }
+            return {
+                books: [
+                    ...currentBookToUpdate.slice(0, indexToUpdate),
+                    newBookToUpdate,
+                    ...currentBookToUpdate.slice(indexToUpdate + 1)
+                ]
+            }
     }
     return state;
 }
