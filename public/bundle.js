@@ -44077,10 +44077,26 @@ var Cart = function (_React$Component) {
   function Cart() {
     _classCallCheck(this, Cart);
 
-    return _possibleConstructorReturn(this, (Cart.__proto__ || Object.getPrototypeOf(Cart)).apply(this, arguments));
+    var _this = _possibleConstructorReturn(this, (Cart.__proto__ || Object.getPrototypeOf(Cart)).call(this));
+
+    _this.state = {
+      showModal: false
+    };
+    return _this;
   }
 
   _createClass(Cart, [{
+    key: 'open',
+    value: function open() {
+      console.log('openin');
+      this.setState({ showModal: true });
+    }
+  }, {
+    key: 'close',
+    value: function close() {
+      this.setState({ showModal: false });
+    }
+  }, {
     key: 'renderEmpty',
     value: function renderEmpty() {
       return _react2.default.createElement('div', null);
@@ -44090,6 +44106,7 @@ var Cart = function (_React$Component) {
     value: function renderCart() {
       var _this2 = this;
 
+      console.log('rendercart', this);
       var cartItemsList = this.props.cart.map(function (cartItem) {
         return _react2.default.createElement(
           _reactBootstrap.Panel,
@@ -44178,10 +44195,78 @@ var Cart = function (_React$Component) {
           )
         );
       }, this);
+
       return _react2.default.createElement(
         _reactBootstrap.Panel,
         { header: 'Cart', bsStyle: 'primary' },
-        cartItemsList
+        cartItemsList,
+        _react2.default.createElement(
+          _reactBootstrap.Row,
+          null,
+          _react2.default.createElement(
+            _reactBootstrap.Col,
+            { xs: 12 },
+            _react2.default.createElement(
+              'h6',
+              null,
+              'Total amount:'
+            ),
+            _react2.default.createElement(
+              _reactBootstrap.Button,
+              {
+                onClick: this.open.bind(this),
+                bsStyle: 'success',
+                bsSize: 'small'
+              },
+              'Proceed to checkout'
+            )
+          )
+        ),
+        _react2.default.createElement(
+          _reactBootstrap.Modal,
+          { show: this.state.showModal, onHide: this.close.bind(this) },
+          _react2.default.createElement(
+            _reactBootstrap.Modal.Header,
+            { closeButton: true },
+            _react2.default.createElement(
+              _reactBootstrap.Modal.Title,
+              null,
+              'Thank you!'
+            )
+          ),
+          _react2.default.createElement(
+            _reactBootstrap.Modal.Body,
+            null,
+            _react2.default.createElement(
+              'h6',
+              null,
+              'Your order has been saved'
+            ),
+            _react2.default.createElement(
+              'p',
+              null,
+              'You will receive an email confirmation'
+            )
+          ),
+          _react2.default.createElement(
+            _reactBootstrap.Modal.Footer,
+            null,
+            _react2.default.createElement(
+              _reactBootstrap.Col,
+              { xs: 6 },
+              _react2.default.createElement(
+                'h6',
+                null,
+                'Total $:'
+              )
+            ),
+            _react2.default.createElement(
+              _reactBootstrap.Button,
+              { onClick: this.close.bind(this) },
+              'Close'
+            )
+          )
+        )
       );
     }
   }, {
