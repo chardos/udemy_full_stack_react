@@ -4,6 +4,8 @@ import React from 'react';
 import {render} from 'react-dom';
 import {Provider} from 'react-redux';
 import BooksList from './components/pages/BooksList';
+import Menu from './components/Menu'
+import Footer from './components/Footer'
 
 import {createStore} from 'redux';
 import reducers from './reducers/index';
@@ -17,7 +19,11 @@ store.subscribe(() => {
 
 render (
     <Provider store={store}>
+      <div>
+        <Menu />
         <BooksList />
+        <Footer />
+      </div>
     </Provider>, document.getElementById('app')
 )
 
