@@ -29,7 +29,7 @@ export const booksReducers = (state = {
         case "DELETE_BOOK":
             return {
                 books: state.books.filter((book) => {
-                    return book._id !== action.payload._id
+                    return book._id !== parseFloat(action.payload);
                 })
             };
         case "UPDATE_BOOK":
