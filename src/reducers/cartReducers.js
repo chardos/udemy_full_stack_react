@@ -1,9 +1,12 @@
 export const cartReducers = (state={cart:[]}, action) => {
     switch(action.type){
         case "ADD_TO_CART":
-            return {
-                cart: [ ...state.cart, ...action.payload ]
-            }
+            return ({
+              ...state,
+              cart: action.payload,
+              totalAmount: totals(action.payload).amount,
+              totalQty: totals(action.payload).qty,
+            })
         case "UPDATE_CART":
             const currentBookToUpdate = [...state.cart]
             const indexToUpdate = currentBookToUpdate.findIndex(book => {
@@ -15,7 +18,7 @@ export const cartReducers = (state={cart:[]}, action) => {
                 quantity: currentBookToUpdate[indexToUpdate].quantity + action.unit
             }
 
-            let cartUpdate = [
+            let cartUpdated = [
                 ...currentBookToUpdate.slice(0, indexToUpdate),
                 newBookToUpdate,
                 ...currentBookToUpdate.slice(indexToUpdate + 1)
@@ -23,12 +26,37 @@ export const cartReducers = (state={cart:[]}, action) => {
 
             return {
                 ...state,
-                cart: cartUpdate,
+                cart: cartUpdated,
+                totalAmount: totals(cartUpdated).amount,
+                totalQty: totals(cartUpdated).qty,
             }
         case "DELETE_CART_ITEM":
             return {
-                cart: action.payload
+              ...state,
+              cart: action.payload,
+              totalAmount: totals(action.payload).amount,
+              totalQty: totals(action.payload).qty,
             }
     }
     return state;
+}
+
+// CALCULATE TOTALS
+export function totals(cartArr) {
+  const totalAmount = cartArr.map(cartItem => {
+    return cartItem.price * cartItem.quantity
+  }).reduce((a,b) => {
+    return a + b;
+  }, 0);
+
+  const totalQty = cartArr.map(cartItem => {
+    return cartItem.quantity
+  }).reduce((a,b) => {
+    return a + b;
+  }, 0);
+
+  return {
+    amount: totalAmount.toFixed(2),
+    qty: totalQty.toFixed(2),
+  };
 }

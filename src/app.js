@@ -11,6 +11,9 @@ import { addToCart } from './actions/cartActions';
 import { postBooks, deleteBook, updateBook } from './actions/booksActions';
 
 const store = createStore(reducers);
+store.subscribe(() => {
+  console.log(store.getState());
+})
 
 render (
     <Provider store={store}>

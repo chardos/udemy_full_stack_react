@@ -19257,6 +19257,9 @@ var _booksActions = __webpack_require__(104);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var store = (0, _redux.createStore)(_index2.default);
+store.subscribe(function () {
+    console.log(store.getState());
+});
 
 (0, _reactDom.render)(_react2.default.createElement(
     _reactRedux.Provider,
@@ -44088,7 +44091,6 @@ var Cart = function (_React$Component) {
   _createClass(Cart, [{
     key: 'open',
     value: function open() {
-      console.log('openin');
       this.setState({ showModal: true });
     }
   }, {
@@ -44106,7 +44108,6 @@ var Cart = function (_React$Component) {
     value: function renderCart() {
       var _this2 = this;
 
-      console.log('rendercart', this);
       var cartItemsList = this.props.cart.map(function (cartItem) {
         return _react2.default.createElement(
           _reactBootstrap.Panel,
@@ -44209,7 +44210,8 @@ var Cart = function (_React$Component) {
             _react2.default.createElement(
               'h6',
               null,
-              'Total amount:'
+              'Total amount: ',
+              this.props.totalAmount
             ),
             _react2.default.createElement(
               _reactBootstrap.Button,
@@ -44257,7 +44259,8 @@ var Cart = function (_React$Component) {
               _react2.default.createElement(
                 'h6',
                 null,
-                'Total $:'
+                'Total $: ',
+                this.props.totalAmount
               )
             ),
             _react2.default.createElement(
@@ -44309,7 +44312,8 @@ var Cart = function (_React$Component) {
 
 function mapStateToProps(state) {
   return {
-    cart: state.cart.cart
+    cart: state.cart.cart,
+    totalAmount: state.cart.totalAmount
   };
 }
 
@@ -44420,44 +44424,72 @@ var booksReducers = exports.booksReducers = function booksReducers() {
 
 
 Object.defineProperty(exports, "__esModule", {
-    value: true
+  value: true
 });
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
+exports.totals = totals;
+
 function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
 var cartReducers = exports.cartReducers = function cartReducers() {
-    var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : { cart: [] };
-    var action = arguments[1];
+  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : { cart: [] };
+  var action = arguments[1];
 
-    switch (action.type) {
-        case "ADD_TO_CART":
-            return {
-                cart: [].concat(_toConsumableArray(state.cart), _toConsumableArray(action.payload))
-            };
-        case "UPDATE_CART":
-            var currentBookToUpdate = [].concat(_toConsumableArray(state.cart));
-            var indexToUpdate = currentBookToUpdate.findIndex(function (book) {
-                return book._id === action._id;
-            });
+  switch (action.type) {
+    case "ADD_TO_CART":
+      return _extends({}, state, {
+        cart: action.payload,
+        totalAmount: totals(action.payload).amount,
+        totalQty: totals(action.payload).qty
+      });
+    case "UPDATE_CART":
+      var currentBookToUpdate = [].concat(_toConsumableArray(state.cart));
+      var indexToUpdate = currentBookToUpdate.findIndex(function (book) {
+        return book._id === action._id;
+      });
 
-            var newBookToUpdate = _extends({}, currentBookToUpdate[indexToUpdate], {
-                quantity: currentBookToUpdate[indexToUpdate].quantity + action.unit
-            });
+      var newBookToUpdate = _extends({}, currentBookToUpdate[indexToUpdate], {
+        quantity: currentBookToUpdate[indexToUpdate].quantity + action.unit
+      });
 
-            var cartUpdate = [].concat(_toConsumableArray(currentBookToUpdate.slice(0, indexToUpdate)), [newBookToUpdate], _toConsumableArray(currentBookToUpdate.slice(indexToUpdate + 1)));
+      var cartUpdated = [].concat(_toConsumableArray(currentBookToUpdate.slice(0, indexToUpdate)), [newBookToUpdate], _toConsumableArray(currentBookToUpdate.slice(indexToUpdate + 1)));
 
-            return _extends({}, state, {
-                cart: cartUpdate
-            });
-        case "DELETE_CART_ITEM":
-            return {
-                cart: action.payload
-            };
-    }
-    return state;
+      return _extends({}, state, {
+        cart: cartUpdated,
+        totalAmount: totals(cartUpdated).amount,
+        totalQty: totals(cartUpdated).qty
+      });
+    case "DELETE_CART_ITEM":
+      return _extends({}, state, {
+        cart: action.payload,
+        totalAmount: totals(action.payload).amount,
+        totalQty: totals(action.payload).qty
+      });
+  }
+  return state;
 };
+
+// CALCULATE TOTALS
+function totals(cartArr) {
+  var totalAmount = cartArr.map(function (cartItem) {
+    return cartItem.price * cartItem.quantity;
+  }).reduce(function (a, b) {
+    return a + b;
+  }, 0);
+
+  var totalQty = cartArr.map(function (cartItem) {
+    return cartItem.quantity;
+  }).reduce(function (a, b) {
+    return a + b;
+  }, 0);
+
+  return {
+    amount: totalAmount.toFixed(2),
+    qty: totalQty.toFixed(2)
+  };
+}
 
 /***/ })
 /******/ ]);

@@ -14,7 +14,6 @@ class Cart extends React.Component {
   }
 
   open(){
-    console.log('openin');
     this.setState({showModal: true})
   }
 
@@ -26,7 +25,6 @@ class Cart extends React.Component {
     return (<div></div>)
   }
   renderCart() {
-    console.log('rendercart', this);
     const cartItemsList = this.props.cart.map(cartItem => {
       return (
         <Panel key={cartItem._id}>
@@ -72,7 +70,7 @@ class Cart extends React.Component {
         {cartItemsList}
         <Row>
             <Col xs={12}>
-                <h6>Total amount:</h6>
+                <h6>Total amount: {this.props.totalAmount}</h6>
                 <Button
                   onClick={this.open.bind(this)}
                   bsStyle="success"
@@ -93,7 +91,7 @@ class Cart extends React.Component {
           </Modal.Body>
           <Modal.Footer>
             <Col xs={6}>
-              <h6>Total $:</h6>
+              <h6>Total $: {this.props.totalAmount}</h6>
             </Col>
             <Button onClick={this.close.bind(this)}>Close</Button>
           </Modal.Footer>
@@ -130,7 +128,8 @@ class Cart extends React.Component {
 
 function mapStateToProps(state) {
   return {
-    cart: state.cart.cart
+    cart: state.cart.cart,
+    totalAmount: state.cart.totalAmount
   }
 }
 
