@@ -3,7 +3,14 @@
 import React from 'react';
 import {render} from 'react-dom';
 import {Provider} from 'react-redux';
+
+import {Router, Route, IndexRoute, browserHistory} from 'react-router';
+
 import BooksList from './components/pages/BooksList';
+import Cart from './components/pages/Cart';
+import BooksForm from './components/pages/BooksForm';
+import Main from './main';
+
 import Menu from './components/Menu'
 import Footer from './components/Footer'
 
@@ -17,14 +24,20 @@ store.subscribe(() => {
   console.log(store.getState());
 })
 
+const Routes = (
+  <Provider store={store}>
+    <Router history={browserHistory}>
+      <Route path="/" component={Main}>
+        <IndexRoute component={BooksList} />
+        <Route path="/admin" component={BooksForm} />
+        <Route path="/cart" component={Cart} />
+      </Route>
+    </Router>
+  </Provider>
+)
+
 render (
-    <Provider store={store}>
-      <div>
-        <Menu />
-        <BooksList />
-        <Footer />
-      </div>
-    </Provider>, document.getElementById('app')
+    Routes, document.getElementById('app')
 )
 
 // STEP 2 create and dispatch actions

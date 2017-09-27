@@ -18,7 +18,7 @@ export default class Menu extends React.Component {
               <NavItem eventKey={2} href="/contact-us">Contact us</NavItem>
             </Nav>
             <Nav pullRight>
-              <NavItem eventKey={1} href="#">admin</NavItem>
+              <NavItem eventKey={1} href="/admin">admin</NavItem>
               <NavItem eventKey={2} href="#">
                 Your cart
                 <Badge className="badge">1</Badge>
