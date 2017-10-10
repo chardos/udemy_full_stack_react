@@ -25,7 +25,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // APIs
 var mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost:27017/bookshopz');
+mongoose.connect('mongodb://localhost:27017/bookshop');
 
 var Books = require('./models/books.js')
 
@@ -41,6 +41,15 @@ app.post('/books', function(req,res){
   });
 })
 
+// --->> GET BOOKS <<---
+app.get('/books', function(req, res){
+  Books.find(function(err, books){
+    if (err) {
+      throw err;
+    }
+    res.json(books)
+  })
+})
 
 // END APIs
 
