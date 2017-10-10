@@ -2,7 +2,9 @@
 
 import React from 'react';
 import {render} from 'react-dom';
+import {applyMiddleware, createStore} from 'redux';
 import {Provider} from 'react-redux';
+import thunk from 'redux-thunk';
 
 import {Router, Route, IndexRoute, browserHistory} from 'react-router';
 
@@ -14,12 +16,13 @@ import Main from './main';
 import Menu from './components/Menu'
 import Footer from './components/Footer'
 
-import {createStore} from 'redux';
 import reducers from './reducers/index';
 import { addToCart } from './actions/cartActions';
 import { postBooks, deleteBook, updateBook } from './actions/booksActions';
 
-const store = createStore(reducers);
+const middleware = applyMiddleware(thunk);
+const store = createStore(reducers, middleware);
+
 store.subscribe(() => {
   console.log(store.getState());
 })
