@@ -54,7 +54,7 @@ app.get('/books', function(req, res){
 
 // --->> DELETE BOOKS <<---
 app.delete('/books/:_id', function(req, res){
-  var query = {_id: req.params_id};
+  var query = {_id: req.params._id};
 
   Books.remove(query, function(err, books){
     if (err) {

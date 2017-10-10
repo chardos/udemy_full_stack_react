@@ -1,26 +1,13 @@
 // BOOKS REDUCERS
 
 export const booksReducers = (state = {
-    books: [
-        {
-            _id: 1,
-            title: 'this is the book title',
-            description: 'this is the book',
-            price: 33.33,
-        },
-        {
-            _id: 2,
-            title: 'this is the book title 2',
-            description: 'this is the book 2',
-            price: 44.44,
-        }
-    ],
+    books: [],
 }, action) => {
     switch (action.type) {
         case "GET_BOOKS":
             return {
                 ...state,
-                books: [...state.books]
+                books: [...action.payload]
             };
         case "POST_BOOK":
             return {
